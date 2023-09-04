@@ -48,6 +48,18 @@ const Login = () => {
             url : '/api/v1/healthz'
         })
 
+        if (test == "success") {
+            if (remember) {
+                localStorage.setItem("rememberId",id);
+            } else {
+                localStorage.removeItem("rememberId");
+            }
+            localStorage.setItem("accessToken", test.data);
+            localStorage.setItem("refreshToken", test.data);
+        } else {
+            Error("Login fail");
+        }
+
         console.log('login js : ', test);
     };
 
