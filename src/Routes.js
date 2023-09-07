@@ -1,15 +1,17 @@
 import { useEffect } from "react";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { ACCESS_TOKEN } from "./utils/constants"
 
-import Login from './view/Login/Login';
-import Home from './view/Home/Home';
+import Login from "./view/Login/Login";
+import Home from "./view/Home/Home";
 
 export const Router = () => {
-    const isLogin = localStorage.getItem("accessToken");
+    const isLogin = localStorage.getItem(ACCESS_TOKEN);
     const navigate = useNavigate();
 
     useEffect(() => {
         if(!isLogin) {
+            console.log("test log : ",ACCESS_TOKEN);
             navigate('/login');
         }
     }, []);

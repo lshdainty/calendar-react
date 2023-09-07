@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
-import './login.css';
-import request from "../../api/core";
+import { useNavigate } from "react-router-dom";
+
+import "./login.css";
+import { reqLogin } from "../../api/repository/login";
+
+// global const
+const REMEMBER_ID = "rememberId";
 
 const Login = () => {
     const [id, setId] = useState('');
     const [pw, setPw] = useState('');
     const [remember, setRemember] = useState(false);
+    const navigate = useNavigate();
 
     const handleId = (e) => {
         setId(e.target.value);
@@ -20,7 +26,7 @@ const Login = () => {
     };
 
     useEffect(() => {
-        const rememberId = localStorage.getItem('rememberId');
+        const rememberId = localStorage.getItem(REMEMBER_ID);
         if (rememberId) {
             setId(rememberId);
             setRemember(true);
@@ -29,38 +35,34 @@ const Login = () => {
 
     const keyDownLogin = (e) => {
         if (e.key === 'Enter') {
-            login();
+            submit();
         }
     };
 
-    const login = async () => {
+    const submit = () => {
         const loginData = {
             login_id : id,
             login_pw : pw
         }
 
-        console.log(id);
-        console.log(pw);
-        console.log(remember);
-
-        const test = await request({
-            method : 'get',
-            url : '/api/v1/healthz'
+        const result = reqLogin(loginData);
+        result.then((params) => {
+            console.log(params);
         })
+        console.log(result);
 
-        if (test == "success") {
-            if (remember) {
-                localStorage.setItem("rememberId",id);
-            } else {
-                localStorage.removeItem("rememberId");
-            }
-            localStorage.setItem("accessToken", test.data);
-            localStorage.setItem("refreshToken", test.data);
-        } else {
-            Error("Login fail");
-        }
-
-        console.log('login js : ', test);
+        // if (test == "success") {
+        //     if (remember) {
+        //         localStorage.setItem(REMEMBER_ID, id);
+        //     } else {
+        //         localStorage.removeItem(REMEMBER_ID);
+        //     }
+        //     localStorage.setItem("accessToken", test.data);
+        //     localStorage.setItem("refreshToken", test.data);
+        //     navigate('/');
+        // } else {
+        //     alert("Login fail");
+        // }
     };
 
     return (
@@ -73,18 +75,18 @@ const Login = () => {
                 </div>
                 <div className="login_pw">
                     <h4>Password</h4>
-                    <input onChange={handlePw} type="password" placeholder="password" />
+                    <input onKeyDown={keyDownLogin} onChange={handlePw} type="password" placeholder="password" />
                 </div>
                 <div className="login_etc">
                     <div className="checkbox">
-                        <input onChange={handleRemember} type="checkbox" />Remember Me?
+                        <input onKeyDown={keyDownLogin} onChange={handleRemember} type="checkbox" />Remember Me?
                     </div>
                     <div className="forgot_pw">
                         <a href="">Forgot Password?</a>
                     </div>
                 </div>
                 <div className="submit">
-                    <button type="submit" onKeyDown={keyDownLogin} onClick={login} >Log In</button>
+                    <button type="submit" onKeyDown={keyDownLogin} onClick={submit} >Log In</button>
                 </div>
             </div>
         </div>

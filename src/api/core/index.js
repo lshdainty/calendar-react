@@ -1,27 +1,25 @@
 import axios from 'axios';
-
-const webBaseURL = '/';
-const apiBaseURL = '/api';
+import { WEB_BASE_URL, API_BASE_URL, ACCESS_TOKEN } from "../../utils/constants";
 
 const request = axios.create({
-    baseUrl: webBaseURL,
+    baseUrl: WEB_BASE_URL,
     headers: {
-        'Content-Type': 'application/json',
+        "Content-Type" : "application/json",
     },
 })
 
 // request interceptor
 request.interceptors.request.use(
     (config) => {
-        if (config.url.includes(apiBaseURL)) {
+        if (config.url.includes(API_BASE_URL)) {
             config.proxy = {
-                'host': '127.0.0.1',
-                'port': '14000',
+                "host" : "127.0.0.1",
+                "port" : "14000",
             }
         }
 
-        if (!config.url.includes('/api/v1/login')) {
-            const accessToken = localStorage.getItem('accessToken');
+        if (!config.url.includes(`${API_BASE_URL}/v1/login`)) {
+            const accessToken = localStorage.getItem(ACCESS_TOKEN);
             config.headers.Authorization = `Bearer ${accessToken}`;
         }
 
@@ -38,12 +36,10 @@ request.interceptors.request.use(
 request.interceptors.response.use(
     (response) => {
         console.log('test1');
-        console.log("index js : ", response);
         return response.data
     },
     async (error)=>{
         console.log('test2');
-        console.log("index js : ", error);
 
         if (error.response.status === 401) {
             // authorization error
