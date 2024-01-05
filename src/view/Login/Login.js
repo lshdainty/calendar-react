@@ -39,30 +39,27 @@ const Login = () => {
         }
     };
 
-    const submit = () => {
+    const submit = async () => {
         const loginData = {
             login_id : id,
             login_pw : pw
         }
 
-        const result = reqLogin(loginData);
-        result.then((params) => {
-            console.log(params);
-        })
+        const result = await reqLogin(loginData);
         console.log(result);
 
-        // if (test == "success") {
-        //     if (remember) {
-        //         localStorage.setItem(REMEMBER_ID, id);
-        //     } else {
-        //         localStorage.removeItem(REMEMBER_ID);
-        //     }
-        //     localStorage.setItem("accessToken", test.data);
-        //     localStorage.setItem("refreshToken", test.data);
-        //     navigate('/');
-        // } else {
-        //     alert("Login fail");
-        // }
+        if (result.result === "success") {
+            if (remember) {
+                localStorage.setItem(REMEMBER_ID, id);
+            } else {
+                localStorage.removeItem(REMEMBER_ID);
+            }
+            localStorage.setItem("accessToken", "");
+            localStorage.setItem("refreshToken", "");
+            navigate('/');
+        } else {
+            alert("Login fail");
+        }
     };
 
     return (

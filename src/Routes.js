@@ -11,7 +11,6 @@ export const Router = () => {
 
     useEffect(() => {
         if(!isLogin) {
-            console.log("test log : ",ACCESS_TOKEN);
             navigate('/login');
         }
     }, []);

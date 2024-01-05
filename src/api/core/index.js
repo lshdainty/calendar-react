@@ -4,7 +4,7 @@ import { WEB_BASE_URL, API_BASE_URL, ACCESS_TOKEN } from "../../utils/constants"
 const request = axios.create({
     baseUrl: WEB_BASE_URL,
     headers: {
-        "Content-Type" : "application/json",
+        "Content-Type" : "application/json"
     },
 })
 
